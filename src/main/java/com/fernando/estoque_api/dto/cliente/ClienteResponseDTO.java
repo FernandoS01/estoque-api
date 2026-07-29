@@ -1,0 +1,21 @@
+package com.fernando.estoque_api.dto.cliente;
+
+import java.time.LocalDateTime;
+
+public class ClienteResponseDTO {
+
+    private Long id;
+
+    private String name;
+
+    private String email;
+
+    private String cpf;
+
+    private String phone;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+}

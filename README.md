@@ -61,6 +61,7 @@ src
  ├── controller
  ├── dto
  ├── entity
+ ├── enums
  ├── exception
  ├── repository
  ├── security

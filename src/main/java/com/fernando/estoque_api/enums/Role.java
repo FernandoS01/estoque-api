@@ -1,4 +1,4 @@
-package com.fernando.estoque_api.entity;
+package com.fernando.estoque_api.enums;
 
 public enum Role {
     ADMIN,

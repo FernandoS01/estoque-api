@@ -21,10 +21,18 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="usuario_id",nullable = false)
     private Usuario usuario;
 
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
+    @OneToMany(mappedBy = "venda",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<ItemVenda> itens;
 
     @CreationTimestamp

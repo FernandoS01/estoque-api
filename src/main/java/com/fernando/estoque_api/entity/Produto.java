@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.*;
-import org.hibernate.annotations.Changelog.Timestamp;
+
 
 @Entity
 @Table(name="produtos")
