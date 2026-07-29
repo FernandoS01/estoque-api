@@ -1,10 +1,15 @@
 package com.fernando.estoque_api.service;
 
 import org.springframework.stereotype.Service;
+
+import com.fernando.estoque_api.dto.usuario.UsuarioRequestDTO;
+import com.fernando.estoque_api.dto.usuario.UsuarioResponseDTO;
+import com.fernando.estoque_api.entity.Usuario;
 import com.fernando.estoque_api.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
+    
     private final UsuarioRepository usuarioRepository;
     
     public UsuarioService(UsuarioRepository usuarioRepository) {

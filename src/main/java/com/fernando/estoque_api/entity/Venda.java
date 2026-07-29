@@ -2,6 +2,9 @@ package com.fernando.estoque_api.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.*;
 
 import java.math.BigDecimal;
@@ -14,7 +17,8 @@ import com.fernando.estoque_api.enums.VendaStatus;
 
 @Entity
 @Table(name="vendas")
-
+@Getter
+@Setter
 public class Venda {
 
     @Id
