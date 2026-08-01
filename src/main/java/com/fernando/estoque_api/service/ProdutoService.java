@@ -41,14 +41,14 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO buscarProdutoPorId(Long id){
-        Produto produto = produtoRepository.findByIdAtDeletedAtIsNotNull(id).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado."));
+        Produto produto = produtoRepository.findByIdDeletedAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado."));
           
         return produtoMapper.toDTO(produto);
     }
 
     public ProdutoResponseDTO buscarProdutoPorSku(String sku){
 
-        Produto produto = produtoRepository.findBySkuAtAtDeletedAtIsNotNull(sku).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado."));
+        Produto produto = produtoRepository.findBySkuDeletedAtIsNull(sku).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado."));
         
         return produtoMapper.toDTO(produto);
     }
@@ -63,7 +63,7 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO atualizarProdutoPorId(Long id, ProdutoRequestDTO dto){
-        Produto produto = produtoRepository.findByIdAtDeletedAtIsNotNull(id).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado"));
+        Produto produto = produtoRepository.findByIdDeletedAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado"));
 
         produto.setName(dto.getName());
         produto.setDescription(dto.getDescription());
@@ -76,7 +76,7 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO atualizarProdutoPorSKU(String sku, ProdutoRequestDTO dto){
-        Produto produto = produtoRepository.findBySkuAtAtDeletedAtIsNotNull(sku).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado"));
+        Produto produto = produtoRepository.findBySkuDeletedAtIsNull(sku).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado"));
 
         produto.setName(dto.getName());
         produto.setDescription(dto.getDescription());
@@ -87,8 +87,9 @@ public class ProdutoService {
 
         return produtoMapper.toDTO(produtoAtualizado);
     }
+    
     public void deletarProduto(Long id){
-        Produto produto = produtoRepository.findByIdAtDeletedAtIsNotNull(id).orElseThrow(
+        Produto produto = produtoRepository.findByIdDeletedAtIsNull(id).orElseThrow(
             ()-> new ResourceNotFoundException("Produto não encontrado"));
         
         produto.setDeletedAt(LocalDateTime.now());
