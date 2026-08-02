@@ -3,7 +3,7 @@ package com.fernando.estoque_api.dto.venda;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ItemVendaDTO {
+public class ItemVendaRequestDTO {
 
     @Getter
     @Setter

@@ -1,6 +1,8 @@
 package com.fernando.estoque_api.dto.venda;
 
 import com.fernando.estoque_api.dto.cliente.ClienteResponseDTO;
+import com.fernando.estoque_api.dto.usuario.UsuarioResponseDTO;
+import com.fernando.estoque_api.dto.venda.ItemVendaResponseDTO;
 import com.fernando.estoque_api.enums.VendaStatus;
 
 import lombok.Getter;
@@ -15,6 +17,10 @@ public class VendaResponseDTO {
     @Getter
     @Setter
     private Long id;
+    
+    @Getter
+    @Setter
+    private UsuarioResponseDTO usuario;
 
     @Getter
     @Setter
@@ -22,7 +28,7 @@ public class VendaResponseDTO {
 
     @Getter
     @Setter
-    private List<ItemVendaDTO> itens;
+    private List<ItemVendaResponseDTO> itens;
 
     @Getter
     @Setter

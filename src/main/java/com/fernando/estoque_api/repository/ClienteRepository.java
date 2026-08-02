@@ -10,7 +10,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
     boolean existsByCpf(String cpf);
     boolean existsByEmail(String email);
 
-    Optional<Cliente> findByIdAndDeleteAtIsNull(Long id);
+    Optional<Cliente> findByIdAndDeletedAtIsNull(Long id);
 
     Optional<Cliente> findByCpfAndDeleteAtIsNull(String cpf);
 

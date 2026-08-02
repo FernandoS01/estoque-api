@@ -43,7 +43,7 @@ public class ClienteService {
     
     public ClienteResponseDTO buscarClientePorId(Long id){
 
-        Cliente cliente = clienteRepository.findByIdAndDeleteAtIsNull(id)
+        Cliente cliente = clienteRepository.findByIdAndDeletedAtIsNull(id)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encontrado."));
         
         return clienteMapper.toDTO(cliente);
@@ -77,7 +77,7 @@ public class ClienteService {
 
     public ClienteResponseDTO atualizarClientePorId(Long id, ClienteRequestDTO dto){
 
-        Cliente cliente = clienteRepository.findByIdAndDeleteAtIsNull(id)
+        Cliente cliente = clienteRepository.findByIdAndDeletedAtIsNull(id)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encotrado."));
         if(dto.getCpf() != null && clienteRepository.existsByCpf(dto.getCpf()) && !cliente.getCpf().equals(dto.getCpf())){
             throw new ResourceAlreadyExistsException("CPF ja cadastrado");
@@ -137,7 +137,7 @@ public class ClienteService {
     }
     public void deletarCliente(Long id){
 
-        Cliente cliente = clienteRepository.findByIdAndDeleteAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Cliente nao encontrado."));
+        Cliente cliente = clienteRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Cliente nao encontrado."));
         cliente.setDeletedAt(LocalDateTime.now());
 
         clienteRepository.save(cliente);

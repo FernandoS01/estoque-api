@@ -13,6 +13,10 @@ public class VendaRequestDTO {
 
     @Getter
     @Setter
+    private Long usuarioId;
+
+    @Getter
+    @Setter
     private List<ItemVendaDTO> itens;
 
 }
