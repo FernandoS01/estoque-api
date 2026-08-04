@@ -24,7 +24,7 @@ public class ProdutoService {
         this.produtoMapper = produtoMapper;
     }
 
-    public ProdutoResponseDTO createProduto(ProdutoRequestDTO dto){
+    public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto){
        if(produtoRepository.existsBySku(dto.getSku())){
         throw new ResourceAlreadyExistsException("SKU ja cadastrado");
        } 
