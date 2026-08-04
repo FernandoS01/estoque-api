@@ -17,6 +17,6 @@ public class VendaRequestDTO {
 
     @Getter
     @Setter
-    private List<ItemVendaDTO> itens;
+    private List<ItemVendaRequestDTO> itens;
 
 }

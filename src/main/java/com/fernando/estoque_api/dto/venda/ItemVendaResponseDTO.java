@@ -3,7 +3,6 @@ package com.fernando.estoque_api.dto.venda;
 import java.math.BigDecimal;
 
 import com.fernando.estoque_api.dto.produto.ProdutoResponseDTO;
-import com.fernando.estoque_api.dto.usuario.UsuarioResponseDTO;
 
 import lombok.Getter;
 import lombok.Setter;

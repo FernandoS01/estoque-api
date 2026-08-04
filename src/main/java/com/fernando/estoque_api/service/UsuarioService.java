@@ -61,7 +61,7 @@ public class UsuarioService {
     public UsuarioResponseDTO atualizarUsuarioPorId(Long id, UsuarioRequestDTO dto){
         
         Usuario usuario = usuarioRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Usuario nao encontrado"));
-        if(usuarioRepository.existsByEmail(dto.getEmail()) && usuario.getEmail().equals(dto.getEmail())){
+        if(usuarioRepository.existsByEmail(dto.getEmail()) && !usuario.getEmail().equals(dto.getEmail())){
             throw new ResourceAlreadyExistsException("Email ja cadastrado.");
         }
         usuario.setName(dto.getName());

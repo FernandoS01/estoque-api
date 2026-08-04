@@ -2,7 +2,7 @@ package com.fernando.estoque_api.service;
 
 import org.springframework.stereotype.Service;
 
-import com.fernando.estoque_api.dto.venda.ItemVendaDTO;
+import com.fernando.estoque_api.dto.venda.ItemVendaRequestDTO;
 import com.fernando.estoque_api.dto.venda.VendaRequestDTO;
 import com.fernando.estoque_api.dto.venda.VendaResponseDTO;
 import com.fernando.estoque_api.entity.Venda;
@@ -62,20 +62,20 @@ public class VendaService {
         venda.setUsuario(usuario);
         venda.setTotalAmount(BigDecimal.ZERO);  
 
-        List<ItemVendaDTO> itens = dto.getItens();
+        List<ItemVendaRequestDTO> itens = dto.getItens();
         List<ItemVenda> itensVenda = new ArrayList<>();
         if(dto.getItens() == null || dto.getItens().size() == 0) {
             throw new BusinessException("Nao e possivel completar a venda, adicione itens.");
         }   
 
-        for(ItemVendaDTO item:itens) {
+        for(ItemVendaRequestDTO item:itens) {
             Produto produto = produtoRepository.findByIdDeletedAtIsNull(item.getProdutoId())
             .orElseThrow(()-> new ResourceNotFoundException("Produto nao encontrado."));
             if(item.getQuantity() <= 0 ){
                 throw new BusinessException("Quantidade nao pode ser menor que 0.");
             }
             if(produto.getStockAmount() < item.getQuantity()) {
-                throw new BusinessException("Quantidade maior que estoque atual");
+                throw new BusinessException("Estoque insuficiente");
             }
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.setVenda(venda);

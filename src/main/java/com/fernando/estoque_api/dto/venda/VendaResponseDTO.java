@@ -2,7 +2,6 @@ package com.fernando.estoque_api.dto.venda;
 
 import com.fernando.estoque_api.dto.cliente.ClienteResponseDTO;
 import com.fernando.estoque_api.dto.usuario.UsuarioResponseDTO;
-import com.fernando.estoque_api.dto.venda.ItemVendaResponseDTO;
 import com.fernando.estoque_api.enums.VendaStatus;
 
 import lombok.Getter;
