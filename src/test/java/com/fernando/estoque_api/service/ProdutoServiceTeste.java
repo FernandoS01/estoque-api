@@ -18,9 +18,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -186,7 +188,33 @@ public class ProdutoServiceTeste {
         verify(produtoMapper, never()).toDTO(produto);
     }
     @Test
-    void deveDeletarComSucesso(){
+    void deveRetornarListaComSucesso(){
+        Produto produto1 = new Produto();
+        Produto produto2 = new Produto();
+        List<Produto> produtos = List.of(produto1,produto2);
 
+        ProdutoResponseDTO response1 = new ProdutoResponseDTO();
+        ProdutoResponseDTO response2 = new ProdutoResponseDTO();
+        
+        
+        when(produtoRepository.findByDeletedAtIsNull()).thenReturn(produtos);
+        when(produtoMapper.toDTO(produto1)).thenReturn(response1);
+        when(produtoMapper.toDTO(produto2)).thenReturn(response2);
+
+        List<ProdutoResponseDTO> results = produtoService.listarProdutos();
+        assertEquals(2, results.size());
+        
+    }
+    @Test
+    void deveDeletarProdutoPorIdComSucesso(){
+        Produto produto = new Produto();
+        produto.setId(1550L);
+
+        when(produtoRepository.findByIdDeletedAtIsNull(1550L)).thenReturn(Optional.of(produto));
+        produtoService.deletarProduto(1550L);
+        
+        assertNotNull(produto.getDeletedAt());
+        verify(produtoRepository).findByIdDeletedAtIsNull(1550L);
+        verify(produtoRepository).save(produto);
     }
 }
