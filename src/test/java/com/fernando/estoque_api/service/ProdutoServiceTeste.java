@@ -190,31 +190,136 @@ public class ProdutoServiceTeste {
     @Test
     void deveRetornarListaComSucesso(){
         Produto produto1 = new Produto();
-        Produto produto2 = new Produto();
-        List<Produto> produtos = List.of(produto1,produto2);
+    produto1.setId(1L);
+    produto1.setName("Coca Cola");
 
-        ProdutoResponseDTO response1 = new ProdutoResponseDTO();
-        ProdutoResponseDTO response2 = new ProdutoResponseDTO();
-        
-        
-        when(produtoRepository.findByDeletedAtIsNull()).thenReturn(produtos);
-        when(produtoMapper.toDTO(produto1)).thenReturn(response1);
-        when(produtoMapper.toDTO(produto2)).thenReturn(response2);
+    Produto produto2 = new Produto();
+    produto2.setId(2L);
+    produto2.setName("Fanta");
 
-        List<ProdutoResponseDTO> results = produtoService.listarProdutos();
-        assertEquals(2, results.size());
-        
+    ProdutoResponseDTO response1 = new ProdutoResponseDTO();
+    response1.setId(1L);
+    response1.setName("Coca Cola");
+
+    ProdutoResponseDTO response2 = new ProdutoResponseDTO();
+    response2.setId(2L);
+    response2.setName("Fanta");
+
+    when(produtoRepository.findByDeletedAtIsNull())
+            .thenReturn(List.of(produto1, produto2));
+
+    when(produtoMapper.toDTO(produto1))
+            .thenReturn(response1);
+
+    when(produtoMapper.toDTO(produto2))
+            .thenReturn(response2);
+
+    List<ProdutoResponseDTO> results =
+            produtoService.listarProdutos();
+
+    assertEquals(2, results.size());
+    assertEquals(1L, results.get(0).getId());
+    assertEquals("Coca Cola", results.get(0).getName());
+    assertEquals(2L, results.get(1).getId());
+    assertEquals("Fanta", results.get(1).getName());
+
+    verify(produtoRepository).findByDeletedAtIsNull();
+    verify(produtoMapper).toDTO(produto1);
+    verify(produtoMapper).toDTO(produto2);    
     }
     @Test
-    void deveDeletarProdutoPorIdComSucesso(){
+    void deveRetornarUmProdutoSeOIdExistir() {
         Produto produto = new Produto();
         produto.setId(1550L);
+        produto.setName("Coca cola");
+        produto.setSku("CO12");
+        produto.setStockAmount(12);
 
-        when(produtoRepository.findByIdDeletedAtIsNull(1550L)).thenReturn(Optional.of(produto));
-        produtoService.deletarProduto(1550L);
-        
-        assertNotNull(produto.getDeletedAt());
+        ProdutoResponseDTO response = new ProdutoResponseDTO();
+        response.setId(1550L);
+        response.setName("Coca cola");
+        response.setSku("CO12");
+        response.setStockAmount(12);
+
+        when(produtoRepository.findByIdDeletedAtIsNull(1550L))
+                .thenReturn(Optional.of(produto));
+
+        when(produtoMapper.toDTO(produto))
+                .thenReturn(response);
+
+        ProdutoResponseDTO result =
+                produtoService.buscarProdutoPorId(1550L);
+
+        assertEquals(1550L, result.getId());
+        assertEquals("Coca cola", result.getName());
+        assertEquals("CO12", result.getSku());
+        assertEquals(12, result.getStockAmount());
+
+        verify(produtoRepository).findByIdDeletedAtIsNull(1550L);
+        verify(produtoMapper).toDTO(produto);
+    }
+    @Test
+    void deveAtualizarOProdutoPorIdComSucesso() {
+        ProdutoRequestDTO request = new ProdutoRequestDTO();
+        request.setName("Fanta Laranja");
+        request.setPrice(new BigDecimal("12.00"));
+        request.setDescription("Garrafa descartavel - 2 litros de volume");
+        request.setStockAmount(15);
+
+        Produto produto = new Produto();
+        produto.setId(1550L);
+        produto.setName("Coca cola");
+        produto.setSku("CO12");
+        produto.setPrice(new BigDecimal("15.00"));
+        produto.setDescription("Garrafa retornavel - 1 litro de volume");
+        produto.setStockAmount(12);
+
+        ProdutoResponseDTO response = new ProdutoResponseDTO();
+        response.setId(1550L);
+        response.setName("Fanta Laranja");
+        response.setSku("CO12");
+        response.setPrice(new BigDecimal("12.00"));
+        response.setDescription("Garrafa descartavel - 2 litros de volume");
+        response.setStockAmount(15);
+
+        when(produtoRepository.findByIdDeletedAtIsNull(1550L))
+                .thenReturn(Optional.of(produto));
+
+        when(produtoRepository.save(produto))
+                .thenReturn(produto);
+
+        when(produtoMapper.toDTO(produto))
+                .thenReturn(response);
+
+        ProdutoResponseDTO result =
+                produtoService.atualizarProdutoPorId(1550L, request);
+
+        assertEquals(1550L, result.getId());
+        assertEquals("Fanta Laranja", result.getName());
+        assertEquals("CO12", result.getSku());
+        assertEquals(new BigDecimal("12.00"), result.getPrice());
+        assertEquals("Garrafa descartavel - 2 litros de volume",
+                result.getDescription());
+        assertEquals(15, result.getStockAmount());
+
+        assertEquals("Fanta Laranja", produto.getName());
+        assertEquals(new BigDecimal("12.00"), produto.getPrice());
+        assertEquals(15, produto.getStockAmount());
+
         verify(produtoRepository).findByIdDeletedAtIsNull(1550L);
         verify(produtoRepository).save(produto);
+        verify(produtoMapper).toDTO(produto);
+    }    
+    @Test
+        void deveDeletarProdutoPorIdComSucesso(){
+            Produto produto = new Produto();
+            produto.setId(1550L);
+
+            when(produtoRepository.findByIdDeletedAtIsNull(1550L)).thenReturn(Optional.of(produto));
+            produtoService.deletarProduto(1550L);
+            
+            assertNotNull(produto.getDeletedAt());
+            verify(produtoRepository).findByIdDeletedAtIsNull(1550L);
+            verify(produtoRepository).save(produto);
+        }
     }
-}
