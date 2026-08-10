@@ -29,7 +29,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ProdutoServiceTeste {
+public class ProdutoServiceTest {
     @Mock
     private ProdutoRepository produtoRepository;
 
@@ -311,7 +311,7 @@ public class ProdutoServiceTeste {
         verify(produtoMapper).toDTO(produto);
     }    
     @Test
-        void deveDeletarProdutoPorIdComSucesso(){
+    void deveDeletarProdutoPorIdComSucesso(){
             Produto produto = new Produto();
             produto.setId(1550L);
 

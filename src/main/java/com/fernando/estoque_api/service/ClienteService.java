@@ -22,7 +22,6 @@ public class ClienteService {
         this.clienteMapper = clienteMapper;
         this.clienteRepository = clienteRepository;
     }
-
     public ClienteResponseDTO criarCliente(ClienteRequestDTO dto){
         if(dto.getCpf() != null && clienteRepository.existsByCpf(dto.getCpf())){
             throw new ResourceAlreadyExistsException("CPF ja cadastrado.");
@@ -40,7 +39,6 @@ public class ClienteService {
 
         return clienteMapper.toDTO(clienteSalvo);
     }
-    
     public ClienteResponseDTO buscarClientePorId(Long id){
 
         Cliente cliente = clienteRepository.findByIdAndDeletedAtIsNull(id)
@@ -48,23 +46,20 @@ public class ClienteService {
         
         return clienteMapper.toDTO(cliente);
     }
-   
     public ClienteResponseDTO buscarClientePorCpf(String cpf){
 
-        Cliente cliente = clienteRepository.findByCpfAndDeleteAtIsNull(cpf)
+        Cliente cliente = clienteRepository.findByCpfAndDeletedAtIsNull(cpf)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encontrado."));
         
         return clienteMapper.toDTO(cliente);
     }
-
     public ClienteResponseDTO buscarClientePorEmail(String email){
 
-        Cliente cliente = clienteRepository.findByEmailAndDeleteAtIsNull(email)
+        Cliente cliente = clienteRepository.findByEmailAndDeletedAtIsNull(email)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encontrado."));
         
         return clienteMapper.toDTO(cliente);
     }
-
     public List<ClienteResponseDTO> listarClientes(){
         List<Cliente> clientes = clienteRepository.findByDeletedAtIsNull();
         
@@ -74,7 +69,6 @@ public class ClienteService {
 
         return response;
     }
-
     public ClienteResponseDTO atualizarClientePorId(Long id, ClienteRequestDTO dto){
 
         Cliente cliente = clienteRepository.findByIdAndDeletedAtIsNull(id)
@@ -97,7 +91,7 @@ public class ClienteService {
     }
     public ClienteResponseDTO atualizarClientePorCpf(String cpf, ClienteRequestDTO dto){
         
-        Cliente cliente = clienteRepository.findByCpfAndDeleteAtIsNull(cpf)
+        Cliente cliente = clienteRepository.findByCpfAndDeletedAtIsNull(cpf)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encotrado."));
         if(dto.getCpf() != null && clienteRepository.existsByCpf(dto.getCpf())){
             throw new ResourceAlreadyExistsException("CPF ja cadastrado");
@@ -117,7 +111,7 @@ public class ClienteService {
     }
     public ClienteResponseDTO atualizarClientePorEmail(String email, ClienteRequestDTO dto){
         
-        Cliente cliente = clienteRepository.findByEmailAndDeleteAtIsNull(email)
+        Cliente cliente = clienteRepository.findByEmailAndDeletedAtIsNull(email)
         .orElseThrow(()-> new ResourceNotFoundException("Cliente nao encotrado."));
         if(dto.getCpf() != null && clienteRepository.existsByCpf(dto.getCpf())){
             throw new ResourceAlreadyExistsException("CPF ja cadastrado");

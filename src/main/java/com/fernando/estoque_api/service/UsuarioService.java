@@ -9,7 +9,8 @@ import com.fernando.estoque_api.exception.ResourceAlreadyExistsException;
 import com.fernando.estoque_api.exception.ResourceNotFoundException;
 import com.fernando.estoque_api.mapper.UsuarioMapper;
 import com.fernando.estoque_api.repository.UsuarioRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.fernando.estoque_api.security.PasswordService;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,12 +20,12 @@ public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordService passwordService;
     
-    public UsuarioService(UsuarioRepository usuarioRepository,UsuarioMapper usuarioMapper, PasswordEncoder passwordEncoder) {
+    public UsuarioService(UsuarioRepository usuarioRepository,UsuarioMapper usuarioMapper,PasswordService passwordService) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordService = passwordService;
     }
     public UsuarioResponseDTO criarUsuario(UsuarioRequestDTO dto){
         if(usuarioRepository.existsByEmail(dto.getEmail())){
@@ -34,7 +35,7 @@ public class UsuarioService {
         usuario.setName(dto.getName());
         usuario.setEmail(dto.getEmail());
         usuario.setRole(dto.getRole());
-        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+        usuario.setPassword(passwordService.encode(dto.getPassword()));
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         return usuarioMapper.toDTO(usuarioSalvo);
@@ -67,7 +68,7 @@ public class UsuarioService {
         usuario.setName(dto.getName());
         usuario.setEmail(dto.getEmail());
         usuario.setRole(dto.getRole());
-        usuario.setPassword(passwordEncoder.encode(dto.getPassword()));
+        usuario.setPassword(passwordService.encode(dto.getPassword()));
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 
         return usuarioMapper.toDTO(usuarioAtualizado);

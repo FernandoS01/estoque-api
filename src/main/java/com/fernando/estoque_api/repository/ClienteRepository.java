@@ -12,9 +12,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 
     Optional<Cliente> findByIdAndDeletedAtIsNull(Long id);
 
-    Optional<Cliente> findByCpfAndDeleteAtIsNull(String cpf);
+    Optional<Cliente> findByCpfAndDeletedAtIsNull(String cpf);
 
-    Optional<Cliente> findByEmailAndDeleteAtIsNull(String email);
+    Optional<Cliente> findByEmailAndDeletedAtIsNull(String email);
 
     List<Cliente> findByDeletedAtIsNull();
 }
