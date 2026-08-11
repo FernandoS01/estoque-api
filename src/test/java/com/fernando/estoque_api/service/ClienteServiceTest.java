@@ -1,7 +1,10 @@
 package com.fernando.estoque_api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.fernando.estoque_api.dto.cliente.ClienteRequestDTO;
 import com.fernando.estoque_api.dto.cliente.ClienteResponseDTO;
 import com.fernando.estoque_api.entity.Cliente;
+import com.fernando.estoque_api.exception.ResourceNotFoundException;
 import com.fernando.estoque_api.mapper.ClienteMapper;
 import com.fernando.estoque_api.repository.ClienteRepository;
 
@@ -35,8 +39,7 @@ public class ClienteServiceTest {
     @InjectMocks
     private  ClienteService clienteService;
 
-    @Test
-    void deveCriarClienteComSucesso(){
+    @Test void deveCriarClienteComSucesso(){
         ClienteRequestDTO request = new ClienteRequestDTO();
         request.setName(name);
         request.setCpf(cpf);
@@ -70,8 +73,7 @@ public class ClienteServiceTest {
         verify(clienteRepository).save(any(Cliente.class));
         verify(clienteMapper).toDTO(cliente);
 
-    };
-    
+    };  
     @Test void deveRetornarUmClientePorId(){
         Cliente cliente = new Cliente();
         cliente.setName(name);
@@ -176,7 +178,6 @@ public class ClienteServiceTest {
         verify(clienteMapper).toDTO(cliente1);
         verify(clienteMapper).toDTO(cliente2);
     }
-
     @Test void deveAtualizarClientePorId(){
         ClienteRequestDTO request = new ClienteRequestDTO();
         request.setName("clienteAtualizado");
@@ -197,7 +198,7 @@ public class ClienteServiceTest {
         response.setEmail("emailatualizado@email.com");
         response.setPhone("19734679521");
 
-        when(clienteRepository.findById(id)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.findByIdAndDeletedAtIsNull(id)).thenReturn(Optional.of(cliente));
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
         when(clienteMapper.toDTO(cliente)).thenReturn(response);
 
@@ -210,15 +211,106 @@ public class ClienteServiceTest {
         
         verify(clienteRepository).save(any(Cliente.class));
         verify(clienteMapper).toDTO(cliente);
-        verify(clienteRepository).findById(id);
+        verify(clienteRepository).findByIdAndDeletedAtIsNull(id);
 
     }
-   // @Test void deveAtualizarClientePorCpf(){}
-   // @Test void deveAtualizarClientePorEmail(){}
+    @Test void deveAtualizarClientePorCpf(){
+         ClienteRequestDTO request = new ClienteRequestDTO();
+        request.setName("clienteAtualizado");
+        request.setEmail("emailatualizado@email.com");
+        request.setPhone("19734679521");
 
-   // @Test void deveDeletarClientes(){}
+        Cliente cliente = new Cliente();
+        cliente.setId(id);
+        cliente.setEmail(email);
+        cliente.setPhone(phone);
 
-   // @Test void deveLancarExcessaoSeIdNaoExistir(){};
-   // @Test void deveLancarExcessaoSeEmailNaoExistir(){};
-   // @Test void deveLancarExcessaoSeCpfExistir(){};
+        ClienteResponseDTO response = new ClienteResponseDTO();
+        response.setName("clienteAtualizado");
+        response.setEmail("emailatualizado@email.com");
+        response.setPhone("19734679521");
+
+        when(clienteRepository.findByCpfAndDeletedAtIsNull(cpf)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+        when(clienteMapper.toDTO(cliente)).thenReturn(response);
+
+        ClienteResponseDTO results = clienteService.atualizarClientePorCpf(cpf, request);
+
+        assertEquals("clienteAtualizado", results.getName());
+        assertEquals("emailatualizado@email.com", results.getEmail());
+        assertEquals("19734679521", results.getPhone());
+        
+        verify(clienteRepository).save(any(Cliente.class));
+        verify(clienteMapper).toDTO(cliente);
+        verify(clienteRepository).findByCpfAndDeletedAtIsNull(cpf);
+    }
+    @Test void deveAtualizarClientePorEmail(){
+        ClienteRequestDTO request = new ClienteRequestDTO();
+        request.setName("clienteAtualizado");
+        request.setCpf("9876543210");
+        request.setPhone("19734679521");
+
+        Cliente cliente = new Cliente();
+        cliente.setId(id);
+        cliente.setName(name);
+        cliente.setCpf(cpf);
+        cliente.setPhone(phone);
+
+        ClienteResponseDTO response = new ClienteResponseDTO();
+        response.setName("clienteAtualizado");
+        response.setCpf("9876543210");
+        response.setPhone("19734679521");
+
+        when(clienteRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
+        when(clienteMapper.toDTO(cliente)).thenReturn(response);
+
+        ClienteResponseDTO results = clienteService.atualizarClientePorEmail(email, request);
+
+        assertEquals("clienteAtualizado", results.getName());
+        assertEquals("9876543210", results.getCpf());
+        assertEquals("19734679521", results.getPhone());
+        
+        verify(clienteRepository).save(any(Cliente.class));
+        verify(clienteMapper).toDTO(cliente);
+        verify(clienteRepository).findByEmailAndDeletedAtIsNull(email);
+
+    }
+    @Test void deveDeletarClientes(){
+        Cliente cliente = new Cliente();
+        when(clienteRepository.findByIdAndDeletedAtIsNull(id)).thenReturn(Optional.of(cliente));
+        clienteService.deletarCliente(id);
+
+        assertNotNull(cliente.getDeletedAt());
+        verify(clienteRepository).findByIdAndDeletedAtIsNull(id);
+        verify(clienteRepository).save(any(Cliente.class));
+    }
+    @Test void deveLancarExcessaoSeIdNaoExistir(){
+        when(clienteRepository.findByIdAndDeletedAtIsNull(id)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, ()->{
+            clienteService.buscarClientePorId(id);
+        });
+        assertEquals("Cliente nao encontrado.", exception.getMessage());
+        verify(clienteMapper,never()).toDTO(any(Cliente.class));
+
+    };
+    @Test void deveLancarExcessaoSeEmailNaoExistir(){
+        when(clienteRepository.findByEmailAndDeletedAtIsNull(email)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, ()->{
+            clienteService.buscarClientePorEmail(email);
+        });
+        assertEquals("Cliente nao encontrado.", exception.getMessage());
+        verify(clienteMapper,never()).toDTO(any(Cliente.class));
+    };
+    @Test void deveLancarExcessaoSeCpfExistir(){
+        when(clienteRepository.findByCpfAndDeletedAtIsNull(cpf)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, ()->{
+            clienteService.buscarClientePorCpf(cpf);
+        });
+        assertEquals("Cliente nao encontrado.", exception.getMessage());
+        verify(clienteMapper,never()).toDTO(any(Cliente.class));
+    };
 }
