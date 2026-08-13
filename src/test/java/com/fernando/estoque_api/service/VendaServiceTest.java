@@ -184,7 +184,7 @@ public class VendaServiceTest {
         assertEquals("Cliente nao encontrado.", exception.getMessage());
         verify(vendaRepository,never()).save(any(Venda.class));
     }
-     @Test void deveRetornarExcessaoSeUsuarioNaoExistir(){
+    @Test void deveRetornarExcessaoSeUsuarioNaoExistir(){
         Long cliente_id = 10L;
         Long usuario_id = 11L;
     
