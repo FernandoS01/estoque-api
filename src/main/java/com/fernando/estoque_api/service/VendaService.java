@@ -72,7 +72,7 @@ public class VendaService {
             Produto produto = produtoRepository.findByIdDeletedAtIsNull(item.getProdutoId())
             .orElseThrow(()-> new ResourceNotFoundException("Produto nao encontrado."));
             if(item.getQuantity() <= 0 ){
-                throw new BusinessException("Quantidade nao pode ser menor que 0.");
+                throw new BusinessException("Quantidade nao pode ser menor ou igual a 0.");
             }
             if(produto.getStockAmount() < item.getQuantity()) {
                 throw new BusinessException("Estoque insuficiente");
