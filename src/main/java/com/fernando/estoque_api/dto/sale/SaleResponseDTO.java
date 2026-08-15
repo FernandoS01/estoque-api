@@ -11,34 +11,22 @@ import java.util.*;
 import java.math.*;
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class SaleResponseDTO {
 
-    @Getter
-    @Setter
     private Long id;
-    
-    @Getter
-    @Setter
+
     private UserResponseDTO user;
 
-    @Getter
-    @Setter
     private ClientResponseDTO client;
 
-    @Getter
-    @Setter
     private List<SaleItemResponse> itens;
 
-    @Getter
-    @Setter
     private BigDecimal totalAmount;
 
-    @Getter
-    @Setter
     private SaleStatus status;
 
-    @Getter
-    @Setter
     private LocalDateTime soldAt;
     
 }

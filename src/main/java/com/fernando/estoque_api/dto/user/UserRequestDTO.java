@@ -6,22 +6,16 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+@Getter
+@Setter
 public class UserRequestDTO {
 
-    @Getter
-    @Setter
     private String name;
 
-    @Getter
-    @Setter
     private String email;
 
-    @Getter
-    @Setter
     private String password;
 
-    @Getter
-    @Setter
     private Role role;
 
 }

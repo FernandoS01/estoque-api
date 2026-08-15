@@ -5,18 +5,14 @@ import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public class SaleRequestDTO {
     
-    @Getter
-    @Setter
     private Long clientId;
 
-    @Getter
-    @Setter
     private Long userId;
 
-    @Getter
-    @Setter
     private List<SaleItemRequestDTO> itens;
 
 }
