@@ -29,7 +29,7 @@ import com.fernando.estoque_api.security.dto.authentication.AuthenticationRespon
 public class AuthenticationServiceTest {
     @Mock private UserRepository userRepository;
     @Mock private PasswordService passwordService;
-    @Mock private JWTService jwtService;
+    @Mock private JwtService jwtService;
     @InjectMocks private AuthenticationService authenticationService;
 
     @Test void shouldLoginSucessfully(){

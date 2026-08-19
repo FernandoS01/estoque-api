@@ -33,20 +33,20 @@ public class SaleService {
 
     
     private final SaleRepository saleRepository;
-    private final SaleMapper vendaMapper;
+    private final SaleMapper saleMapper;
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
     public SaleService(
         SaleRepository saleRepository, 
-        SaleMapper vendaMapper,
+        SaleMapper saleMapper,
         ClientRepository clientRepository,
         UserRepository userRepository,
         ProductRepository productRepository
     ){
         this.saleRepository = saleRepository;
-        this.vendaMapper = vendaMapper;
+        this.saleMapper = saleMapper;
         this.clientRepository = clientRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
@@ -92,8 +92,8 @@ public class SaleService {
         sale.setStatus(SaleStatus.COMPLETED);
         sale.setSoldAt(LocalDateTime.now());
         
-        Sale vendaSalva = saleRepository.save(sale);
+        Sale createdSale = saleRepository.save(sale);
 
-        return vendaMapper.toDTO(vendaSalva);
+        return saleMapper.toDTO(createdSale);
     }
 }

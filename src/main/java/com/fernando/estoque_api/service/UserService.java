@@ -36,9 +36,9 @@ public class UserService {
         User.setEmail(dto.getEmail());
         User.setRole(dto.getRole());
         User.setPassword(passwordService.encode(dto.getPassword()));
-        User UserSalvo = UserRepository.save(User);
+        User createdUser = UserRepository.save(User);
 
-        return UserMapper.toDTO(UserSalvo);
+        return UserMapper.toDTO(createdUser);
     }
     public UserResponseDTO findUserById(Long id){
        

@@ -10,11 +10,11 @@ import com.fernando.estoque_api.security.dto.authentication.AuthenticationRespon
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordService passwordService;
-    private final JWTService jwtService;
+    private final JwtService jwtService;
 
     public AuthenticationService(UserRepository userRepository,
                                 PasswordService passwordService,
-                                JWTService jwtService){
+                                JwtService jwtService){
         this.userRepository = userRepository;
         this.passwordService = passwordService;
         this.jwtService = jwtService;

@@ -34,9 +34,9 @@ public class ProductService {
        product.setPrice(dto.getPrice());
        product.setStockAmount(dto.getStockAmount() != null ? dto.getStockAmount():0);
 
-       Product productUpadted = productRepository.save(product);
+       Product updatedProduct = productRepository.save(product);
 
-       return productMapper.toDTO(productUpadted);
+       return productMapper.toDTO(updatedProduct);
     }
     public ProductResponseDTO findProductById(Long id){
         Product product = productRepository.findByIdDeletedAtIsNull(id).orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado."));

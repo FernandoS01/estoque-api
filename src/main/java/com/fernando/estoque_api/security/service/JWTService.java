@@ -7,7 +7,7 @@ import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JWTService {
+public class JwtService {
     private SecretKey key = Jwts.SIG.HS256.key().build();
 
     public String generateToken(String data){
@@ -28,5 +28,13 @@ public class JWTService {
                     .getPayload()
                     .getSubject()
                     .equals(data);  
+    }
+    public String extractSubject(String jwt){
+         return Jwts.parser()
+            .verifyWith(key)
+            .build()
+            .parseSignedClaims(jwt)
+            .getPayload()
+            .getSubject();
     }
 }

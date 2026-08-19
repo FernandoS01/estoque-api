@@ -35,9 +35,9 @@ public class ClientService {
         client.setEmail(dto.getEmail());
         client.setCpf(dto.getCpf());
         client.setPhone(dto.getPhone());
-        Client clienteSalvo = clientRepository.save(client);
+        Client createdClient = clientRepository.save(client);
 
-        return clientMapper.toDTO(clienteSalvo);
+        return clientMapper.toDTO(createdClient);
     }
     public ClientResponseDTO findClientById(Long id){
 
